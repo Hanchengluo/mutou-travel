@@ -16,3 +16,17 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::group([
+    'namespace' => 'Dashboard',
+    'prefix' => 'dashboard'
+], function () {
+    Route::post('login', 'AuthController@login');
+    Route::post('unlock', 'AuthController@unlock');
+    Route::post('refresh', 'AuthController@refresh');
+    
+    Route::group(['middleware'=>'auth:api'], function () {
+        Route::get('init', 'InitController@inital');
+    });
+});

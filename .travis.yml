@@ -1,0 +1,16 @@
+language: php
+
+php:
+  - '7.0'
+  - '7.1'
+
+before_script:
+  - composer install
+  - cp .env.test .env
+  - php artisan key:generate
+  - "mysql -e 'create database `travel`;'"
+  - php artisan migrate --seed
+
+script:
+  - phpunit -v
+

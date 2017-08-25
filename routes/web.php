@@ -18,3 +18,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+/**
+ * Dashboard Index
+ *
+ * @var [type]
+ */
+Route::group([
+    'prefix' => 'dashboard',
+], function () {
+    Route::get('{path?}', function () {
+        return view('dashboard');
+    })->where('path', '[\/\w\.-]*');
+});
