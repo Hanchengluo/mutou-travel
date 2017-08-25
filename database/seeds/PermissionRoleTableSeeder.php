@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class PermissionRoleTableSeeder extends Seeder
 {
@@ -14,15 +15,12 @@ class PermissionRoleTableSeeder extends Seeder
     {
         
 
-        \DB::table('permission_role')->delete();
+        DB::table('permission_role')->delete();
         
-        \DB::table('permission_role')->insert(array (
-            0 => 
-            array (
-                'permission_id' => 1,
-                'role_id' => 1,
-            ),
-        ));
+        DB::table('permission_role')->insert([
+            'permission_id' => 1,
+            'role_id' => 1,
+        ]);
         
         
     }

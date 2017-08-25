@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class RoleUserTableSeeder extends Seeder
 {
@@ -14,15 +15,12 @@ class RoleUserTableSeeder extends Seeder
     {
         
 
-        \DB::table('role_user')->delete();
+        DB::table('role_user')->delete();
         
-        \DB::table('role_user')->insert(array (
-            0 => 
-            array (
-                'user_id' => 1,
-                'role_id' => 1,
-            ),
-        ));
+        DB::table('role_user')->insert([
+            'user_id' => 1,
+            'role_id' => 1,
+        ]);
         
         
     }
