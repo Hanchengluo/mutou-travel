@@ -40,7 +40,6 @@ export default {
             window.localStorage.setItem('token_expires', Number(window.$.now()) + (Number(res.data.expires_in) *
                 1000))
             window.localStorage.setItem('refresh_token_expires', Number(window.$.now()) + 2592000000)
-            window.localStorage.setItem('user', JSON.stringify(res.data.user))
 
             commit('LOGIN', res.data)
             user.obj.$Message.destroy()
@@ -83,6 +82,7 @@ export default {
 
         axios.get('init').then((res) => {
             console.log(res);
+            window.localStorage.setItem('user',JSON.stringify(res.data.user));
             commit('USER_INFO', res.data.user)
             commit('NAVIGATIONS', res.data.nav)
         }).catch((err) => {

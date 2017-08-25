@@ -12,13 +12,14 @@
         "laravel/passport": "^3.0",
         "laravel/tinker": "~1.0",
         "nesbot/carbon": "^1.22",
+        "orangehill/iseed": "dev-master",
         "overtrue/laravel-filesystem-qiniu": "^0.0.3",
-        "zizaco/entrust": "^1.8",
-        "orangehill/iseed": "dev-master"
+        "zizaco/entrust": "^1.8"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.4",
+        "laravel/dusk": "^1.1",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~6.0"
     },

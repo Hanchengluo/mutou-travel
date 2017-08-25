@@ -31,6 +31,10 @@ const routes = new VueRouter({
             name: 'locked',
             component: require('../views/locked.vue')
         },{
+            path:'navigations',
+            name:'navigations',
+            component: require('../views/navigations/index.vue')
+        },{
             path:'customer',
             name:'customer',
             component: require('../views/home.vue')
