@@ -13,7 +13,7 @@ class TestDashboradAuth extends TestCase
     public function testLogin(){
         $response = $this->post('api/dashboard/login',['username'=>'mutou','password'=>'mutou.io']);
         $content = $response->getContent();
-        self::$token = json_decode($response->getContent(),true);;
+        self::$token = json_decode($response->getContent(),true);
         $response->assertStatus(200)->assertJsonStructure(['token_type','expires_in','access_token','refresh_token']);
     }
 
