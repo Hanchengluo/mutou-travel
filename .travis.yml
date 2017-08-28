@@ -8,6 +8,7 @@ before_script:
   - cp .env.test .env
   - php artisan key:generate
   - "mysql -e 'create database `travel`;'"
+  - php artisan serve
   - php artisan migrate --seed
 
 script:
