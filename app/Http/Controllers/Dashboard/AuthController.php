@@ -45,11 +45,12 @@ class AuthController extends Controller
 
         // 请求access_token
         $client = new Client();
-        try {
+        // try {
             $response = $client->request('POST', request()->root().'/oauth/token', ['form_params'=>$param]);
-        } catch (RequestException $e) {
-            return response()->json(['message'=>'密码错误'], 401);
-        }
+            return $response;
+        // } catch (RequestException $e) {
+            // return response()->json(['message'=>'密码错误'], 401);
+        // }
 
         Auth::login($user, true);
         
