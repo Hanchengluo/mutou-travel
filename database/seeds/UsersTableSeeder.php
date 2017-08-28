@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
             'name' => 'mutou',
             'phone' => NULL,
             'email' => 'admin@mutou.io',
-            'password' => '$2y$10$IxeNmWFi/ON8KLgFcFIcteMiMJPAoYDLc/jSvuMwRvO29qgRZUDLO',
+            'password' => bcrypt('mutou.io'),
             'avatar' => NULL,
             'status' => 1,
             'is_admin' => 1,

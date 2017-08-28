@@ -14,15 +14,23 @@ class TestDashboradAuth extends TestCase
         $response = $this->post('api/dashboard/login',['username'=>'mutou','password'=>'mutou.io']);
         $content = $response->getContent();
         self::$token = json_decode($response->getContent(),true);
+
+        echo($response->getContent());
         $response->assertStatus(200)->assertJsonStructure(['token_type','expires_in','access_token','refresh_token']);
     }
 
+    /** 
+     * @depends testLogin 
+     */  
     public function testUnlock(){
         $response = $this->post('api/dashboard/unlock',['id'=>1,'password'=>'mutou.io','refresh_token'=>self::$token['refresh_token']]);
         self::$token = json_decode($response->getContent(),true);
         $response->assertStatus(200)->assertJsonStructure(['token_type','expires_in','access_token','refresh_token']);
     }
 
+    /** 
+     * @depends testLogin 
+     */  
     public function testRefresh(){
         $response = $this->post('api/dashboard/refresh',['refresh_token'=>self::$token['refresh_token']]);
         self::$token = json_decode($response->getContent(),true);
