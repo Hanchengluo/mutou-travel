@@ -1,16 +1,20 @@
 <template>
     <div id="breadcrumb">
         <div class="page-title">
-            <navicon></navicon>
-            <h2>导航管理</h2>
+            <slot name="title">
+                <navicon :icon="navigation.icon" :type="navigation.icon_type"></navicon>
+                <h2>{{navigation.display_name}}</h2>
+            </slot>
         </div>
         <div class="action left-action">
             <slot name="left">
-                <Button type="info">信息按钮</Button>
+                
             </slot>
         </div>
         <div class="action right-action">
-            <slot name="right"></slot>
+            <slot name="right">
+                
+            </slot>
         </div>
     </div>
 </template>
@@ -23,6 +27,23 @@ export default {
     components: {
         navicon
     },
+    computed: {
+        navigation: function() {
+            const nav = this.$store.state.navigations
+
+            for (var i = 0; i < nav.length; i++) {
+                if (nav[i].name == this.$route.name) {
+                    return nav[i]
+                }
+            }
+
+            return {
+                icon: 'ios-grid-view-outline',
+                icon_type: 0,
+                display_name: '控制面板'
+            }
+        }
+    }
 }
 </script>
 
@@ -73,17 +94,17 @@ export default {
             line-height: 56px;
             float: left;
             font-weight: normal;
-            color:#246;
+            color: #246;
         }
     }
-    div.action{
+    div.action {
         width: auto;
         height: 56px;
         line-height: 56px;
-        &.left-action{
+        &.left-action {
             float: left;
         }
-        &.right-action{
+        &.right-action {
             float: right;
             padding-right: 10px;
         }
