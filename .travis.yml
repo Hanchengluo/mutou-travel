@@ -6,7 +6,6 @@ php:
 before_script:
   - composer install
   - cp .env.test .env
-  - php artisan key:generate
   - "mysql -e 'create database `travel`;'"
   - php artisan migrate --seed
 
