@@ -263,6 +263,7 @@ export default {
         if (!this.is_login_page && this.$store.state.token == '') {
             this.$store.dispatch('init')
         }
+        window.$Message = this.$Message
     },
     updated: function () {
         // 初始化数据

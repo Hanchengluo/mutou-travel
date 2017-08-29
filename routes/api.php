@@ -28,5 +28,6 @@ Route::group([
     
     Route::group(['middleware'=>'auth:api'], function () {
         Route::get('init', 'InitController@inital');
+        Route::resource('navigations', 'NavigationsController');
     });
 });

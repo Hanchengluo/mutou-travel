@@ -30,7 +30,7 @@ class AuthController extends Controller
         $return = [];
         if ($user && ($user->status == 0)) {
             $return = ['msg'=>'账号已被禁用','code'=>403];
-        } elseif ($user && ($user->is_admin == 0)) {
+        } elseif ($user && !$user->is_admin) {
             $return = ['msg'=>'不是管理员账号','code'=>403];
         } elseif (!$user) {
             $return = ['msg'=>'账号不存在','code'=>404];

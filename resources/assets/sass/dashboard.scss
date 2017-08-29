@@ -2,7 +2,7 @@ html {
     height: 100%;
 }
 body{
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif!important;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     color: #383838;
@@ -52,4 +52,9 @@ body{
     flex-grow: 1;
     display: flex;
     height: 100%;
+}
+
+.layout-content{
+    padding: 5px;
+    padding-top: 60px;
 }

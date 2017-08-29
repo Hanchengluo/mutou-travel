@@ -35,6 +35,14 @@ const routes = new VueRouter({
             name:'navigations',
             component: require('../views/navigations/index.vue')
         },{
+            path:'navigations/add',
+            name:'navigations-add',
+            component: require('../views/navigations/edit.vue')
+        },{
+            path:'navigations/edit',
+            name:'navigations-edit',
+            component: require('../views/navigations/edit.vue')
+        },{
             path:'customer',
             name:'customer',
             component: require('../views/home.vue')
@@ -49,7 +57,7 @@ const routes = new VueRouter({
         },{
             path:'navigation',
             name:'navigation',
-            component: require('../views/home.vue')
+            component: require('../views/home.vue'),
         },{
             path:'cms',
             name:'cms',

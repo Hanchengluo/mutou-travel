@@ -32,3 +32,10 @@ Route::group([
         return view('dashboard');
     })->where('path', '[\/\w\.-]*');
 });
+
+
+Route::group(['namespace' => 'Dashboard'], function () {
+    Route::resource('nav', 'NavigationsController');
+});
+
+

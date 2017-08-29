@@ -11,5 +11,8 @@ export default {
     },
     NAVIGATIONS: (state, nav) => {
         state.navigations = nav
-    }
+    },
+    ALL_NAVIGATIONS: (state, nav) => {
+        state.all_navigations = nav
+    },
 }
