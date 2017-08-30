@@ -171,5 +171,12 @@ export default {
       .catch(res => {
         window.$Message.error("获取导航信息失败！请刷新重试");
       });
+  },
+  add_navigations:({commit},navigations)=>{
+    axios.post('/navigations',{navigations:navigations}).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
 };

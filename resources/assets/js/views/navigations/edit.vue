@@ -1,11 +1,11 @@
 <template>
-    <div id="navigations-add">
+    <div id="navigations-add" class="root-element">
         <breadcrumb>
             <div slot="left">
                 <Button @click="go_back">
                     <Icon type="ios-arrow-left"></Icon> 返回
                 </Button>
-                <Button type="success">确认保存</Button>
+                <Button type="success" @click="handleSubmit">确认保存</Button>
             </div>
             <div slot="right">
                 <Button type="error" disabled>删除</Button>
@@ -38,81 +38,24 @@
                             <Icon type="android-more-vertical"></Icon> 可调整同级下菜单项目的位置)</i>
                     </span>
                     <Row class="nav-row">
-                        <Col span="14" class="navigation-edit">
+                        <Col :span="(currentEdit == 1) ? 14 : 5 " class="navigation-edit">
                         <div class="navigation-edit-title">一级菜单</div>
-                        <div class="navigation-edit-lists">
-                            <div class="navigation-edit-lists-header">
-                                <div class="item">显示名称</div>
-                                <div class="item">标识字符</div>
-                                <div class="item">链接地址</div>
-                                <div class="item">导航图标</div>
-                                <div class="item">是否显示</div>
-                                <div class="item">跳转方式</div>
-                            </div>
-                            <div class="navigation-edit-lists-items">
-                                <div class="navigation-edit-lists-items-row" v-for="(nav, index) in navigation.nav" :key="index" :prop="'nav.' + index" v-on:mouseenter="">
-                                    <div class="item name">
-                                        <Icon type="android-more-vertical"></Icon>
-                                        <Input placeholder="显示名称" v-model="nav.display_name"></Input>
-                                    </div>
-                                    <div class="item">
-                                        <Input placeholder="英文标识" v-model="nav.name"></Input>
-                                    </div>
-                                    <div class="item link">
-                                        <Input placeholder="链接地址" v-model="nav.url">
-                                        <Button slot="append" icon="ios-box"></Button>
-                                        </Input>
-                                    </div>
-                                    <div class="item">
-                                        <navicon icon="ios-grid-view-outline" type="0"></navicon>&nbsp;&nbsp;
-                                        <Button icon="ios-camera"></Button>
-                                    </div>
-                                    <div class="item">
-                                        <i-switch size="large" v-model="nav.display">
-                                            <span slot="open">显示</span>
-                                            <span slot="close">隐藏</span>
-                                        </i-switch>
-                                    </div>
-                                    <div class="item">
-                                        <Select v-model="nav.target">
-                                            <Option value="_blank">
-                                                新窗口打开
-                                            </Option>
-                                            <Option value="_self">
-                                                原窗口打开
-                                            </Option>
-                                        </Select>
-                                        <Button type="error">
-                                            <Icon type="trash-a"></Icon>
-                                        </Button>
-                                    </div>
-                                </div>
-                                <div class="add-button">
-                                    <Button>新增一项</Button>
-                                </div>
-                            </div>
-                        </div>
+                        <NavigationEdit :navigations="navigation.nav" :edit="currentEdit == 1" :level="1" :act="editLevel" v-on:listenNavigationsChangeEvent="changeNavLevel1"></NavigationEdit>
                         </Col>
-                        <Col span="5" class="navigation-edit">
+                        <Col :span="(currentEdit == 2) ? 14 : 5 " class="navigation-edit">
                         <div class="navigation-edit-title">二级菜单</div>
-                        <div class="navigation-show-list">
-                            <div class="navigation-show-list-row">
-
-                            </div>
-                            <div class="add-sub-nav">
-                                <Button type="success" long>添加子菜单</Button>
-                            </div>
-                        </div>
+                        <NavigationEdit :navigations="level_2_nav" :edit="currentEdit == 2" :level="2" :act="editLevel" v-on:listenNavigationsChangeEvent="changeNavLevel2"></NavigationEdit>
                         </Col>
-                        <Col span="5" class="navigation-edit">
+                        <Col :span="(currentEdit == 3) ? 14 : 5 " class="navigation-edit">
                         <div class="navigation-edit-title">三级菜单</div>
+                        <NavigationEdit :navigations="level_3_nav" :edit="currentEdit == 3" :level="3" :act="editLevel" v-on:listenNavigationsChangeEvent="changeNavLevel3" v-if="is_show_level_3"></NavigationEdit>
                         </Col>
                     </Row>
                 </FormItem>
             </Form>
 
             <div class="save-bottom">
-                <Button type="success">确认保存</Button>
+                <Button type="success" @click="handleSubmit">确认保存</Button>
             </div>
         </div>
     </div>
@@ -120,6 +63,7 @@
 <script>
 import breadcrumb from '../../components/Breadcrumb.vue'
 import navicon from '../../components/Navicon.vue'
+import NavigationEdit from '../../components/NavigationEdit.vue'
 export default {
     data: () => ({
         navigation: {
@@ -136,25 +80,101 @@ export default {
                 url: '',
                 icon: 'ios-grid-view-outline',
                 icon_type: 0,
-                child:[]
+                child: []
             }]
         },
-        
+        level_1_index: 0,
+        level_2_index: 0,
+        level_3_index: 0,
+        currentEdit: 1,
+
     }),
     components: {
         breadcrumb,
-        navicon
+        navicon,
+        NavigationEdit
     },
     methods: {
+        // 返回
         go_back: function() {
             this.$router.go(-1)
+        },
+
+        changeNavLevel1: function(data) {
+            this.navigation.nav = data.navigations
+            this.level_1_index = data.currentIndex
+        },
+        changeNavLevel2: function(data) {
+            try {
+                if (typeof (this.navigation.nav[this.level_1_index]) != undefined) {
+                    this.navigation.nav[this.level_1_index].child = data.navigations
+                    this.level_2_index = data.currentIndex
+                }
+            } catch (error) {
+
+            }
+        },
+        changeNavLevel3: function(data) {
+            try {
+                if (typeof (this.navigation.nav[this.level_1_index]) != undefined) {
+                    this.navigation.nav[this.level_1_index].child[this.level_2_index].child = data.navigations
+                    this.level_3_index = data.currentIndex
+                }
+            } catch (error) {
+
+            }
+        },
+        editLevel:function(current){
+            this.currentEdit = current
+        },
+        handleSubmit:function(){
+            this.$store.dispatch('add_navigations',this.navigation)
+        }
+    },
+    computed: {
+        level_2_nav: function() {
+            // const navs = this.navigation.nav[this.level_1_index].child;
+            try {
+                const navs = this.navigation.nav[this.level_1_index].child;
+                return navs
+            } catch (error) {
+                return []
+            }
+        },
+        level_3_nav:function(){
+            try {
+                const navs = this.navigation.nav[this.level_1_index].child[this.level_2_index].child;
+                return navs
+            } catch (error) {
+                return []
+            }
+        },
+        is_show_level_3:function(){
+            try {
+                if(this.navigation.nav[this.level_1_index].child.length > 0){
+                    return true
+                }else{
+                    return false
+                }
+            } catch (error) {
+                return false
+            }
         }
     },
     created() {
         if (this.$route.name == 'navigations-edit') {
-            this.navigation = this.$route.params.nav
+            if (typeof (this.$route.params.nav) == 'undefined') {
+                axios.get("/navigations/" + this.$route.params.id).then((res) => {
+                    this.navigation = res.data
+                    // console.log(this.navigation.nav[this.level_1_index].child)
+                }).catch((err) => {
+                    this.$Message.error("获取导航信息失败！请刷新重试");
+                })
+            } else {
+                this.navigation = this.$route.params.nav
+            }
         }
-        console.log(this.$route)
+        // console.log(this.navigation.nav[this.level_1_index].child)
     }
 }
 </script>
@@ -207,86 +227,10 @@ export default {
                         border-right: solid 1px #3288df;
                     }
                 }
-                .navigation-edit-lists {
-                    width: 100%;
-                    height: auto;
-                    border: solid 1px #3288df;
-                    .navigation-edit-lists-header {
-                        width: 100%;
-                        height: 45px;
-                        border-bottom: 1px solid #b4cfea;
-                        background-color: #f2f7fb;
-                        color: #246;
-                        display: flex;
-                        div.item {
-                            flex: 1;
-                            text-align: center;
-                            line-height: 45px;
-                            font-size: 14px;
-                        }
-                    }
-                    .navigation-edit-lists-items {
-                        width: 100%;
-                        height: auto;
-                        .navigation-edit-lists-items-row {
-                            height: 50px;
-                            line-height: 50px;
-                            border-bottom: solid 1px #b4cfea;
-                            display: flex;
-                            i.ivu-icon {
-                                font-size: 14px!important;
-                            }
-                            div.item {
-                                flex: 1;
-                                text-align: center;
-                                line-height: 45px;
-                                padding: 0px 5px;
-                                .ivu-select {
-                                    width: 60%;
-                                }
-                                &.name {
-                                    i.ivu-icon {
-                                        font-size: 14px;
-                                        width: 20px;
-                                        text-align: center;
-                                        color: #57a3f3;
-                                        cursor: pointer;
-                                    }
-                                    .ivu-input-wrapper {
-                                        width: 80%;
-                                    }
-                                }
-                                &.link {
-                                    .ivu-input-wrapper {
-                                        margin-top: 5px;
-                                    }
-                                }
-                            }
-                        }
-                        div.add-button {
-                            width: 100%;
-                            height: 60px;
-                            padding: 20px;
-                        }
-                    }
-                }
+
                 &:last-child {
                     .navigation-edit-title {
                         border-right: solid 1px #3288df;
-                    }
-                }
-                .navigation-show-list {
-                    width: calc(100% - 10px);
-                    height: auto;
-                    border: solid 1px #3288df;
-                    margin-left: 10px;
-                    .navigation-show-list-row {
-                        height: 50px;
-                        line-height: 50px;
-                        border-bottom: solid 1px #b4cfea;
-                    }
-                    .add-sub-nav{
-                        padding: 20px;
                     }
                 }
             }

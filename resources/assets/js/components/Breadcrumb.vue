@@ -49,13 +49,11 @@ export default {
 
 <style lang="scss" scoped>
 #breadcrumb {
-    width: calc(100% - 230px);
+    width: 100%;
     height: 56px;
     background-color: #fcfcfc;
     border-bottom: 1px solid #eee;
     padding: 0px 20px;
-    position: fixed;
-    z-index: 10;
     &:before {
         content: " ";
         display: table;

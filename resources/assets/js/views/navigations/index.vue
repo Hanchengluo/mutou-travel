@@ -1,5 +1,5 @@
 <template>
-    <div id="navigations">
+    <div id="navigations" class="root-element">
         <breadcrumb>
             <div slot="left">
                 <Button type="success" @click="to_add">新增导航</Button>
@@ -46,7 +46,7 @@ export default {
         },
         to_edit:function(nav){
             console.log(nav)
-            this.$router.push({name:'navigations-edit',params:{nav:nav}});
+            this.$router.push({name:'navigations-edit',params:{nav:nav,id:nav.id}});
         },
         get_navigations: function() {
             this.loading = true
@@ -82,7 +82,7 @@ export default {
         height: auto;
         min-height: 140px;
         border: 1px solid #bcd;
-        position: absolute;
+        // position: absolute;
         padding-top: 10px;
         div.header {
             display: inline-block;

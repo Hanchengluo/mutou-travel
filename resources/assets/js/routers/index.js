@@ -39,7 +39,7 @@ const routes = new VueRouter({
             name:'navigations-add',
             component: require('../views/navigations/edit.vue')
         },{
-            path:'navigations/edit',
+            path:'navigations/edit/:id',
             name:'navigations-edit',
             component: require('../views/navigations/edit.vue')
         },{
