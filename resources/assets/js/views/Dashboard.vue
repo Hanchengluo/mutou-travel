@@ -1,6 +1,8 @@
 <template>
     <div id="Dashboard" v-if="is_login_page">
+        <transition name="fade" mode="out-in" :duration="200">
         <router-view></router-view>
+        </transition>
     </div>
     <div id="Dashboard" v-else>
         <div class="main-sidebar-wrapper">
@@ -197,7 +199,9 @@
                 </ul>
             </div>
             <div class="main-body">
+                <transition name="fade" mode="out-in" :duration="200">
                 <router-view></router-view>
+                </transition>
             </div>
         </div>
     </div>

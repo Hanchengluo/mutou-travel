@@ -14,7 +14,7 @@
         <div class="layout-content">
             <div class="nav-lists">
                 <Row :gutter="32">
-                    <Col span="12" v-for="nav in all_navigations" :key="nav.id">
+                    <Col span="12" v-for="nav in all_navigations" :key="nav.id" :track-by="nav.sort">
                     <div class="navigation-list-item">
                         <div class="header">
                             <strong>{{nav.display_name}}</strong>
@@ -84,6 +84,7 @@ export default {
         border: 1px solid #bcd;
         // position: absolute;
         padding-top: 10px;
+        margin-bottom: 10px;
         div.header {
             display: inline-block;
             width: auto;

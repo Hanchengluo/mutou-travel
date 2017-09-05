@@ -9,22 +9,26 @@ axios.defaults.baseURL = "/api/dashboard";
 
 axios.interceptors.request.use(
   config => {
+    iView.LoadingBar.start();
     if (store.state.token) {
       config.headers.Authorization = `Bearer ${store.state.token}`;
     }
     return config;
   },
   err => {
+    iView.LoadingBar.error();
     return Promise.reject(err);
   }
 );
 
 axios.interceptors.response.use(
   config => {
+    iView.LoadingBar.finish();
     return config;
   },
   err => {
-    return Promise.reject(error);
+    iView.LoadingBar.finish();
+    return Promise.reject(err);
   }
 );
 

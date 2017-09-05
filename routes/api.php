@@ -29,5 +29,6 @@ Route::group([
     Route::group(['middleware'=>'auth:api'], function () {
         Route::get('init', 'InitController@inital');
         Route::resource('navigations', 'NavigationsController');
+        Route::get('navigations/validata/{type}/{name}/{id?}','NavigationsController@validata');
     });
 });

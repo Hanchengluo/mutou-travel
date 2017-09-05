@@ -8,6 +8,7 @@ class Navigation extends Model
 {
     protected $casts = [
         'display' => 'boolean',
+        'sort' => 'integer',
     ];
 
     public function pos()
