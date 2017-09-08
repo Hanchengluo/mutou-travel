@@ -70,7 +70,7 @@ import navicon from '../../components/Navicon.vue'
 import NavigationEdit from '../../components/NavigationEdit.vue'
 export default {
     data() {
-        const validataName = (rule, value, callback)=>{
+        const validataName = (rule, value, callback) => {
             this.validata_name(rule, value, callback)
         }
         return {
@@ -150,7 +150,12 @@ export default {
         handleSubmit: function(name) {
             try {
                 this.$refs[name].validate((valid) => {
-                    this.$store.dispatch('add_navigations', this.navigation)
+                    console.log(this.$route.name)
+                    if (this.$route.name == 'navigations-edit') {
+                        this.$store.dispatch('edit_navigations', this.navigation)
+                    } else {
+                        this.$store.dispatch('add_navigations', this.navigation)
+                    }
                 })
             } catch (error) {
                 console.log(error)

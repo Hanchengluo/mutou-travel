@@ -150,6 +150,9 @@ export default {
                 okText: '确认删除',
                 onOk: () => {
                     this.nav.nav.splice(this.navigation.nav.indexOf(nav), 1)
+                    if (nav.id != undefined) {
+                        this.$store.dispatch('delete_navigations',{id:nav.id,is_nav:1})
+                    }
                 }
             });
         },

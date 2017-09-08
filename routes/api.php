@@ -30,5 +30,6 @@ Route::group([
         Route::get('init', 'InitController@inital');
         Route::resource('navigations', 'NavigationsController');
         Route::get('navigations/validata/{type}/{name}/{id?}','NavigationsController@validata');
+        Route::delete('navigations/{id}/{is_nav?}','NavigationsController@destroy');
     });
 });
