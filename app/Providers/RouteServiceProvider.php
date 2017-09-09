@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use App\Redirect;
+use Carbon\Carbon;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -26,6 +29,13 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
+
+        $redirects = Cache::remember('redirects', Carbon::now()->addDays(30), function () {
+            return Redirect::all();
+        });
+        foreach ($redirects as $key => $value) {
+            Route::redirect($value->url, $value->redirect, $value->code);
+        }
     }
 
     /**

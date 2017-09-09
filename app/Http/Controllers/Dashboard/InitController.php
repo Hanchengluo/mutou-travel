@@ -29,11 +29,20 @@ class InitController extends Controller
         $data['user'] = $user;
 
         // 导航栏信息
-        $navpos = NavigationPositions::with(['nav'=> function ($query) use ($perms) {
-            $query->orderBy('sort', 'asc')->whereIn('name', $perms)->where('parent_id', 0)->with(['child'=>function ($q) use ($perms) {
-                $q->orderBy('sort', 'asc')->whereIn('name', $perms);
-            }]);
-        }])->where('name', 'dashboard')->first();
+        if ($user->id != 1) {
+            $navpos = NavigationPositions::with(['nav'=> function ($query) use ($perms) {
+                $query->orderBy('sort', 'asc')->whereIn('name', $perms)->where('parent_id', 0)->with(['child'=>function ($q) use ($perms) {
+                    $q->orderBy('sort', 'asc')->whereIn('name', $perms);
+                }]);
+            }])->where('name', 'dashboard')->first();
+        }else{
+            $navpos = NavigationPositions::with(['nav'=> function ($query) {
+                $query->orderBy('sort', 'asc')->where('parent_id', 0)->with(['child'=>function ($q) {
+                    $q->orderBy('sort', 'asc');
+                }]);
+            }])->where('name', 'dashboard')->first();
+        }
+        
         $data['nav'] = $navpos->nav;
 
         return response()->json($data);

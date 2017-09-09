@@ -8,7 +8,7 @@
                 <Button type="success" @click="handleSubmit('navigationValidate')">确认保存</Button>
             </div>
             <div slot="right">
-                <Button type="error" disabled>删除</Button>
+                <Button type="error" :disabled="navigation.id == 1 || navigation.id == undefined" @click="destory">删除</Button>
             </div>
         </breadcrumb>
         <div class="layout-content">
@@ -150,7 +150,7 @@ export default {
         handleSubmit: function(name) {
             try {
                 this.$refs[name].validate((valid) => {
-                    console.log(this.$route.name)
+                    // console.log(this.$route.name)
                     if (this.$route.name == 'navigations-edit') {
                         this.$store.dispatch('edit_navigations', this.navigation)
                     } else {
@@ -158,7 +158,7 @@ export default {
                     }
                 })
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
         },
         validata_name: function(rule, value, callback, id) {
@@ -171,6 +171,18 @@ export default {
                 }
                 callback();
             })
+        },
+        destory: function() {
+            if (this.navigation.id !== 1) {
+                this.$Modal.confirm({
+                    title: '删除导航',
+                    content: '<p>确认要删除导航 <strong>' + this.navigation.display_name + '</strong> 吗？</p><p>该导航下的所有菜单都会被删除</p>',
+                    okText: '确认删除',
+                    onOk: () => {
+                        this.$store.dispatch('delete_navigations', { id: this.navigation.id, is_nav: 0 })
+                    }
+                });
+            }
         }
     },
     computed: {
@@ -185,6 +197,7 @@ export default {
         level_3_nav: function() {
             try {
                 const navs = this.navigation.nav[this.level_1_index].child[this.level_2_index].child;
+                // console.log(navs)
                 return navs
             } catch (error) {
                 return []

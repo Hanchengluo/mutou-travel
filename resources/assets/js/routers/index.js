@@ -43,25 +43,9 @@ const routes = new VueRouter({
             name:'navigations-edit',
             component: require('../views/navigations/edit.vue')
         },{
-            path:'customer',
-            name:'customer',
-            component: require('../views/home.vue')
-        },{
-            path:'product',
-            name:'product',
-            component: require('../views/home.vue')
-        },{
-            path:'order',
-            name:'order',
-            component: require('../views/home.vue')
-        },{
-            path:'navigation',
-            name:'navigation',
-            component: require('../views/home.vue'),
-        },{
-            path:'cms',
-            name:'cms',
-            component: require('../views/home.vue')
+            path:'navigations/redirect',
+            name:'navigations-redirect',
+            component:require('../views/navigations/redirect.vue')
         },{
             path: '*',
             redirect: '/dashboard/home'

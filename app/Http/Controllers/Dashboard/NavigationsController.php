@@ -19,7 +19,9 @@ class NavigationsController extends Controller
     {
         $navigations = NavigationPositions::with(['nav'=>function ($query) {
             $query->orderBy('sort', 'asc')->where('parent_id', 0)->with(['child'=>function ($q) {
-                $q->orderBy('sort', 'asc');
+                $q->with(['child'=>function($s){
+                    $s->orderBy('sort', 'asc');
+                }])->orderBy('sort', 'asc');
             }]);
         }])->get();
 
@@ -120,7 +122,9 @@ class NavigationsController extends Controller
     {
         $navigation = NavigationPositions::with(['nav'=>function ($query) {
             $query->orderBy('sort', 'asc')->where('parent_id', 0)->with(['child'=>function ($q) {
-                $q->orderBy('sort', 'asc');
+                $q->with(['child'=>function($s){
+                    $s->orderBy('sort', 'asc');
+                }])->orderBy('sort', 'asc');
             }]);
         }])->where('id', $id)->first();
 

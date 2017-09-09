@@ -8,7 +8,9 @@
                 </Button>
             </div>
             <div slot="right">
+                <router-link :to="{name:'navigations-redirect'}">
                 <Button>网址重定向</Button>
+                </router-link>
             </div>
         </breadcrumb>
         <div class="layout-content">
@@ -45,7 +47,6 @@ export default {
             this.$router.push({ name: 'navigations-add' })
         },
         to_edit:function(nav){
-            console.log(nav)
             this.$router.push({name:'navigations-edit',params:{nav:nav,id:nav.id}});
         },
         get_navigations: function() {

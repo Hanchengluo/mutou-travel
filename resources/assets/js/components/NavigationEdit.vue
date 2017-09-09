@@ -68,7 +68,7 @@
         <div class="navigation-show-list" v-else v-on:mouseenter="is_hover=true" v-on:mouseleave="is_hover=false">
             <Button type="success" size="small" icon="edit" @click="act(level)" class="edit" v-if="!edit && is_hover">编辑</Button>
             <div class="navigation-show-list-title" v-if="parent">
-                {{parent.display_name}} 子菜单
+                [ {{parent.display_name}} ] 子菜单
             </div>
             <div class="navigation-show-list-row" v-if="navigation.nav.length > 0">
                 <div class="item" v-for="(nav, index) in navigation.nav" :key="index" v-bind:class="{ active: current_index == index }">
@@ -141,7 +141,7 @@ export default {
                 icon_type: 0,
                 child: []
             })
-            console.log(this.navigation.nav)
+            // console.log(this.navigation.nav)
         },
         delete_one: function(nav) {
             this.$Modal.confirm({

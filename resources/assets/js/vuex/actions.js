@@ -176,6 +176,8 @@ export default {
         window.$Message.error("获取导航信息失败！请刷新重试");
       });
   },
+
+  // 添加导航
   add_navigations: ({ commit }, navigations) => {
     axios
       .post("/navigations", { navigations: navigations })
@@ -187,6 +189,8 @@ export default {
         window.$Message.error("新增导航失败");
       });
   },
+
+  // 编辑导航
   edit_navigations: ({ commit }, navigations) => {
     axios
       .put("/navigations/" + navigations.id, { navigations: navigations })
@@ -198,12 +202,17 @@ export default {
         window.$Message.error("编辑导航失败");
       });
   },
+
+  // 删除导航
   delete_navigations: ({ commit }, nav) => {
     axios
       .delete("/navigations/" + nav.id + "/" + nav.is_nav)
       .then(res => {
         commit("ALL_NAVIGATIONS", res.data);
         window.$Message.success("删除导航成功");
+        if(nav.is_nav != 1){
+            router.push({name:'navigations'});
+        }
       })
       .catch(err => {
         window.$Message.error("删除导航失败");
