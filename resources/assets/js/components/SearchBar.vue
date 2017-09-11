@@ -1,21 +1,19 @@
 <template>
     <div id="search-bar">
         <div class="grid" v-show="!toggle_status">
-            <Form ref="search" :label-width="120">
-                <div class="form-slot">
-                    <slot name="form">
+            <div class="form-slot">
+                <slot name="form">
 
-                    </slot>
-                </div>
-                <div class="handler">
-                    <Button icon="search" type="success">查找</Button>
-                    <Button>重置</Button>
-                </div>
-            </Form>
+                </slot>
+            </div>
+            <div class="handler">
+                <Button icon="search" type="success" @click="searchHander">查找</Button>
+                <Button @click="resetHander">重置</Button>
+            </div>
         </div>
         <div class="tool">
             <div class="left">
-                <Button icon="refresh" class="refresh-btn"></Button>
+                <Button icon="refresh" class="refresh-btn" @click="refreshHander" :loading="loading"></Button>
                 <div class="left-slot">
                     <slot name="left-tool">
 
@@ -28,15 +26,17 @@
                     <Icon v-else type="android-arrow-dropdown"></Icon>
                 </a>
                 <div class="page">
-                    <span class="count">共 <strong>0</strong> 条记录</span>
-                    <Select style="width:60px" placeholder="1/1">
-                        <Option value="1">1</Option>
+                    <span class="count">共
+                        <strong>{{page.total}}</strong> 条记录</span>
+                    <Select style="width:60px" placeholder="1/1" v-model="select_page" :disabled="pageOptions.length <= 1" v-on:on-change="jump">
+                        <Option v-for="opt in pageOptions" :value="opt.value" :key="opt.value">{{opt.text}}</Option>
+                        <Option :value="2" :key="2">222</Option>
                     </Select>
                     <ButtonGroup>
-                        <Button>
+                        <Button @click="prevPage" :disabled="page.prev_page_url == null">
                             <Icon type="chevron-left"></Icon>
                         </Button>
-                        <Button>
+                        <Button @click="nextPage" :disabled="page.next_page_url == null">
                             <Icon type="chevron-right"></Icon>
                         </Button>
                     </ButtonGroup>
@@ -51,11 +51,66 @@
 <script>
 export default {
     data: () => ({
-        toggle_status: false
+        toggle_status:false,
+        select_page:1
     }),
+    props:{
+        searchHander:{
+            type:Function,
+            required:true
+        },
+        resetHander:{
+            type:Function,
+            required:true 
+        },
+        refreshHander:{
+            type:Function,
+            required:true
+        },
+        page:{
+            required:true
+        },
+        goPage:{
+            type:Function,
+            required:true
+        },
+        gridShow:{
+            type:Boolean,
+            default:false
+        },
+        loading:{
+            type:Boolean,
+            default:false
+        }
+
+    },
     methods: {
         toggleGrid: function() {
             this.toggle_status = !this.toggle_status
+        },
+        nextPage:function(){
+            this.goPage(this.page.next_page_url)
+        },
+        prevPage:function(page){
+            this.goPage(this.page.prev_page_url)
+        },
+        jump:function(value){
+            this.goPage(this.page.path + '?page='+value)
+        }
+    },
+    created:function(){
+        this.toggle_status = this.gridShow
+    },
+    computed:{
+        pageOptions:function(){
+            const opt = []
+            for (var i = 0; i < this.page.total; i++) {
+                opt.push({
+                    value:i+1,
+                    text:i+1+'/'+this.page.total
+                })
+            }
+            return opt
         }
     }
 }
@@ -159,15 +214,15 @@ export default {
                 height: 50px;
                 line-height: 50px;
                 padding-right: 20px;
-                span.count{
+                span.count {
                     color: #aaa;
                     font-size: 14px;
-                    strong{
+                    strong {
                         font-weight: bold;
                         color: #777;
                     }
                 }
-                .ivu-select{
+                .ivu-select {
                     margin-left: 10px;
                     margin-right: 10px;
                 }
