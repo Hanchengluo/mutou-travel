@@ -31,5 +31,8 @@ Route::group([
         Route::resource('navigations', 'NavigationsController');
         Route::get('navigations/validata/{type}/{name}/{id?}','NavigationsController@validata');
         Route::delete('navigations/{id}/{is_nav?}','NavigationsController@destroy');
+        
+        Route::resource('redirect', 'RedirectController');
+        Route::post('redirect/validata','RedirectController@validata');
     });
 });

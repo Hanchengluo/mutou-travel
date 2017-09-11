@@ -210,12 +210,66 @@ export default {
       .then(res => {
         commit("ALL_NAVIGATIONS", res.data);
         window.$Message.success("删除导航成功");
-        if(nav.is_nav != 1){
-            router.push({name:'navigations'});
+        if (nav.is_nav != 1) {
+          router.push({ name: "navigations" });
         }
       })
       .catch(err => {
         window.$Message.error("删除导航失败");
+      });
+  },
+
+  // 获取重定向
+  get_redirects: ({ commit }, page) => {
+    if (page == undefined || page == "" || page == null) {
+      page = "redirect";
+    }
+    axios
+      .get(page)
+      .then(res => {
+        commit("REDIRECTS", res.data);
+      })
+      .catch(err => {
+        window.$Message.error("获取重定向列表失败，请刷新重试");
+      });
+  },
+
+  // 新增重定向
+  store_redirect: ({ commit }, redirect) => {
+    axios
+      .post("redirect", redirect)
+      .then(res => {
+        commit("REDIRECTS", res.data);
+        window.$Message.success("新增重定向成功");
+      })
+      .catch(err => {
+        window.$Message.error("新增重定向失败");
+      });
+  },
+
+  // 更新重定向
+  update_redirect: ({ commit }, redirect) => {
+    axios
+      .put("redirect/" + redirect.id, redirect)
+      .then(res => {
+        commit("REDIRECTS", res.data);
+        window.$Message.success("修改重定向成功");
+      })
+      .catch(err => {
+        window.$Message.error("修改重定向失败");
+      });
+  },
+
+  // 删除重定向
+  destroy_redirect: ({ commit }, id) => {
+    axios
+      .delete("redirect/" + id)
+      .then(res => {
+        commit("REDIRECTS", res.data);
+        window.$Message.success("删除成功");
+      })
+      .catch(err => {
+        window.$Message.error("删除失败");
       });
   }
 };

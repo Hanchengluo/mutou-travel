@@ -30,7 +30,6 @@
                         <strong>{{page.total}}</strong> 条记录</span>
                     <Select style="width:60px" placeholder="1/1" v-model="select_page" :disabled="pageOptions.length <= 1" v-on:on-change="jump">
                         <Option v-for="opt in pageOptions" :value="opt.value" :key="opt.value">{{opt.text}}</Option>
-                        <Option :value="2" :key="2">222</Option>
                     </Select>
                     <ButtonGroup>
                         <Button @click="prevPage" :disabled="page.prev_page_url == null">
@@ -52,7 +51,7 @@
 export default {
     data: () => ({
         toggle_status:false,
-        select_page:1
+        select_page:1,
     }),
     props:{
         searchHander:{
@@ -104,10 +103,10 @@ export default {
     computed:{
         pageOptions:function(){
             const opt = []
-            for (var i = 0; i < this.page.total; i++) {
+            for (var i = 0; i < this.page.last_page; i++) {
                 opt.push({
                     value:i+1,
-                    text:i+1+'/'+this.page.total
+                    text:i+1+'/'+this.page.last_page
                 })
             }
             return opt

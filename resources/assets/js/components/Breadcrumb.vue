@@ -8,12 +8,12 @@
         </div>
         <div class="action left-action">
             <slot name="left">
-                
+
             </slot>
         </div>
         <div class="action right-action">
             <slot name="right">
-                
+
             </slot>
         </div>
     </div>
@@ -30,10 +30,34 @@ export default {
     computed: {
         navigation: function() {
             const nav = this.$store.state.navigations
-
             for (var i = 0; i < nav.length; i++) {
                 if (nav[i].name == this.$route.name) {
                     return nav[i]
+                } else {
+                    if (nav[i].child.length > 0) {
+                        for (var t = 0; t < nav[i].child.length; t++) {
+                            if (nav[i].child[t].name == this.$route.name) {
+                                return nav[i].child[t]
+                            } else {
+                                if (nav[i].child[t].child != undefined) {
+                                    if (nav[i].child[t].child.length > 0) {
+                                        for (var s = 0; s < nav[i].child[t].child.length; s++) {
+                                            if (nav[i].child[t].child[s].name == this.$route.name) {
+                                                return nav[i].child[t].child[s]
+                                            }
+                                        }
+
+                                    }
+                                } else {
+                                    return {
+                                        icon: 'ios-grid-view-outline',
+                                        icon_type: 0,
+                                        display_name: '控制面板'
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

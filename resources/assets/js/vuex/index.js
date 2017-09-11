@@ -18,6 +18,7 @@ const state = {
     sidebarCollapsed: false,
     navigations: '',
     all_navigations:'',
+    redirects:'',
 };
 
 export default new Vuex.Store({

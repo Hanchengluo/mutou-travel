@@ -15,4 +15,7 @@ export default {
     ALL_NAVIGATIONS: (state, nav) => {
         state.all_navigations = nav
     },
+    REDIRECTS:(state,redirects)=>{
+        state.redirects = redirects
+    }
 }
