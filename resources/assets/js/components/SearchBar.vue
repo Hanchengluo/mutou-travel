@@ -1,6 +1,6 @@
 <template>
     <div id="search-bar">
-        <div class="grid" v-show="!toggle_status">
+        <div class="grid" v-show="toggle_status">
             <div class="form-slot">
                 <slot name="form">
 

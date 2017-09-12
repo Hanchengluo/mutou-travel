@@ -16,19 +16,19 @@
                     <Row>
                         <Col span="6">
                         <FormItem label="搜索：">
-                            <Input placeholder="请输入网址/描述"></Input>
+                            <Input placeholder="请输入网址/描述" v-model="keywords"></Input>
                         </FormItem>
                         </Col>
                         <Col span="8">
                         <FormItem label="状态码：">
-                            <CheckboxGroup>
-                                <Checkbox label="300"></Checkbox>
-                                <Checkbox label="301"></Checkbox>
-                                <Checkbox label="302"></Checkbox>
-                                <Checkbox label="303"></Checkbox>
-                                <Checkbox label="304"></Checkbox>
-                                <Checkbox label="305"></Checkbox>
-                                <Checkbox label="307"></Checkbox>
+                            <CheckboxGroup v-model="codes">
+                                <Checkbox label="300" :true-value="300"></Checkbox>
+                                <Checkbox label="301" :true-value="301"></Checkbox>
+                                <Checkbox label="302" :true-value="302"></Checkbox>
+                                <Checkbox label="303" :true-value="303"></Checkbox>
+                                <Checkbox label="304" :true-value="304"></Checkbox>
+                                <Checkbox label="305" :true-value="305"></Checkbox>
+                                <Checkbox label="307" :true-value="307"></Checkbox>
                             </CheckboxGroup>
                         </FormItem>
                         </Col>
@@ -36,14 +36,14 @@
                 </Form>
             </div>
             <div slot="left-tool">
-                <Button type="error" disabled>删 除</Button>
+                <Button type="error" :disabled="selection.length <= 0" @click="destroy(selection)">删 除</Button>
             </div>
         </SearchBar>
 
         <div class="layout-content">
 
             <div class="table-row">
-                <Table stripe :columns="columns" :data="redirects.data" :context="this"></Table>
+                <Table stripe :columns="columns" :data="redirects.data" v-on:on-selection-change="selected"></Table>
 
                 <Page :total="redirects.total" :current="redirects.current_page" v-on:on-change="jump" show-total show-elevator></Page>
             </div>
@@ -91,6 +91,9 @@ export default {
             edit_model: false,
             model_title: '新增网址重定向',
             model_loadding: true,
+            keywords: '',
+            codes: ['300', '301', '302', '303', '304', '305', '307'],
+            selection: [],
             formData: {
                 url: '/',
                 redirect: '',
@@ -222,10 +225,13 @@ export default {
             this.$router.go(-1)
         },
         searchHander: function() {
-            alert(222)
+            const path = this.redirects.path + '?keywords=' + this.keywords + '&codes=' + this.codes.join(',')
+            this.goPage(path)
         },
         resetHander: function() {
-
+            this.codes = ['300', '301', '302', '303', '304', '305', '307']
+            this.keywords = ''
+            this.$store.dispatch('get_redirects', this.redirects.path)
         },
         refreshHander: function() {
             this.loading = true
@@ -237,8 +243,14 @@ export default {
             this.$store.dispatch('get_redirects', path)
         },
         jump: function(page) {
-            const path = this.redirects.path + '?page=' + page
+            var path = this.redirects.path
+            if (this.keywords != '') {
+                path = this.redirects.path + '?keywords=' + this.keywords + '&codes=' + this.codes.join(',') + '&page=' + page
+            } else {
+                path = this.redirects.path + '?page=' + page
+            }
             this.goPage(path)
+
         },
         create: function() {
             this.formData = {
@@ -273,14 +285,28 @@ export default {
             this.model_title = '编辑网址重定向'
             this.formData = this.redirects.data[index]
         },
-        toDestory:function(index){
+        toDestory: function(index) {
             this.destroy(this.redirects.data[index].id)
         },
-        destroy:function(id){
-            if (typeof(id) == Array) {
+        destroy: function(id) {
+            if (typeof (id) == Array) {
                 id = id.join(',')
             }
-            this.$store.dispatch('destroy_redirect',id)
+            this.$Modal.confirm({
+                title: '删除重定向',
+                content: '<p>确认要删除重定向吗？</p><p>删除后不可恢复！</p>',
+                okText: '确认删除',
+                onOk: () => {
+                    this.$store.dispatch('destroy_redirect', id)
+                }
+            });
+            
+        },
+        selected: function(selection) {
+            for (var i = 0; i < selection.length; i++) {
+                this.selection.push(selection[i].id)
+            }
+            console.log(selection)
         }
 
     },
@@ -297,7 +323,8 @@ export default {
         },
         host: function() {
             return window.location.protocol + "//" + window.location.host
-        }
+        },
+
     },
     created: function() {
         const _this = this

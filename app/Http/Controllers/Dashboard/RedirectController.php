@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Redirect;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -31,9 +32,26 @@ class RedirectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $redirect = Redirect::paginate(15);
+        $input = $request->all();
+        $keywords = empty($input['keywords']) ? '' : $input['keywords'];
+        $codes = empty($input['codes']) ? '300,301,302,303,304,305,307' : $input['codes'];
+        
+        $codes = explode(',',$codes);
+        $redirect = Redirect::where(function($query) use($codes,$keywords) {
+            $query->whereIn('code',$codes);
+            if ($keywords != '') {
+                $query->where(function ($q) use ($keywords) {
+                    $q->orWhere('url','like','%'.$keywords.'%');
+                    $q->orWhere('redirect','like','%'.$keywords.'%');
+                    $q->orWhere('description','like','%'.$keywords.'%');
+                });
+            }
+        })->paginate(config('site.page_size'));
+
+        $redirect->appends(['keywords' => $keywords,'codes'=>implode(',',$codes)])->links();
+        
         return $redirect;
     }
 
@@ -67,7 +85,7 @@ class RedirectController extends Controller
         $redirect->code = $request->code;
         $redirect->save();
 
-        return $this->index();
+        Cache::forget('redirects');
     }
 
     /**
@@ -78,7 +96,7 @@ class RedirectController extends Controller
      */
     public function show($id)
     {
-        //
+        return Redirect::find($id);
     }
 
     /**
@@ -89,7 +107,7 @@ class RedirectController extends Controller
      */
     public function edit($id)
     {
-        
+        return Redirect::find($id);
     }
 
     /**
@@ -118,7 +136,7 @@ class RedirectController extends Controller
         $redirect->code = $request->code;
         $redirect->save();
 
-        return $this->index();
+        Cache::forget('redirects');
     }
 
     /**
@@ -129,8 +147,14 @@ class RedirectController extends Controller
      */
     public function destroy($id)
     {
+        if (strpos($id, ",") === false){
+
+        }else{
+            $id = explode(',',$id);
+            $id = array_unique($id);
+        }
         Redirect::destroy($id);
-        return $this->index();
+        Cache::forget('redirects');
     }
 
     public function validata(Request $request)

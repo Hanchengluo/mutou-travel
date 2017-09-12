@@ -235,11 +235,11 @@ export default {
   },
 
   // 新增重定向
-  store_redirect: ({ commit }, redirect) => {
+  store_redirect: ({ commit,dispatch }, redirect) => {
     axios
       .post("redirect", redirect)
       .then(res => {
-        commit("REDIRECTS", res.data);
+        dispatch('get_redirects')
         window.$Message.success("新增重定向成功");
       })
       .catch(err => {
@@ -248,11 +248,11 @@ export default {
   },
 
   // 更新重定向
-  update_redirect: ({ commit }, redirect) => {
+  update_redirect: ({ commit,dispatch }, redirect) => {
     axios
       .put("redirect/" + redirect.id, redirect)
       .then(res => {
-        commit("REDIRECTS", res.data);
+        dispatch('get_redirects')
         window.$Message.success("修改重定向成功");
       })
       .catch(err => {
@@ -261,11 +261,11 @@ export default {
   },
 
   // 删除重定向
-  destroy_redirect: ({ commit }, id) => {
+  destroy_redirect: ({ commit,dispatch }, id) => {
     axios
       .delete("redirect/" + id)
       .then(res => {
-        commit("REDIRECTS", res.data);
+        dispatch('get_redirects','')
         window.$Message.success("删除成功");
       })
       .catch(err => {
